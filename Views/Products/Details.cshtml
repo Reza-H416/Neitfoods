@@ -1,0 +1,19 @@
+@model NutShop.Models.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="product-details">
+    <h1>@Model.Name</h1>
+    <p class="price">Rs. @Model.Price</p>
+    <p class="description">@Model.Description</p>
+    @if (Model.StockQuantity > 0)
+    {
+        <form method="post" action="/Cart/AddToCart">
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <input type="number" name="quantity" value="1" min="1" />
+            <button type="submit" class="btn">Add to Cart</button>
+        </form>
+    }
+</div>

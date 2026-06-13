@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - NutShop</title>
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a href="/">NutShop</a>
+                </div>
+
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/Products">Shop</a></li>
+                    <li><a href="/Cart">Cart</a></li>
+                    <li><a href="/Admin">Admin</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 NutShop - Premium Dry Fruits & Nuts. All rights reserved.</p>
+            <p>Contact: info@nutshop.com | Phone: +46 70 000 00 00</p>
+        </div>
+    </footer>
+
+    <script src="~/js/script.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

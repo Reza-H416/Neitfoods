@@ -1,0 +1,22 @@
+@model IEnumerable<NutShop.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h2>Our Products</h2>
+
+<div class="products-grid">
+    @foreach (var product in Model)
+    {
+        <div class="product-card">
+            <h3>@product.Name</h3>
+            <p class="price">Rs. @product.Price</p>
+            <form method="post" action="/Cart/AddToCart">
+                <input type="hidden" name="productId" value="@product.Id" />
+                <input type="number" name="quantity" value="1" min="1" />
+                <button type="submit" class="btn">Add to Cart</button>
+            </form>
+        </div>
+    }
+</div>
