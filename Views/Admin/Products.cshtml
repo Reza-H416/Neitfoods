@@ -1,7 +1,64 @@
+@model List<NutShop.Models.Product>
+
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Manage Products";
+    var categories = ViewBag.Categories as List<NutShop.Models.Category>;
 }
 
-<h2>Products Management</h2>
-<p>Product management interface for admins</p>
-<a href="/Admin/Dashboard" class="btn">Back to Dashboard</a>
+<h2>Manage Products</h2>
+
+<div class="checkout-form">
+    <h3>Add New Product</h3>
+
+    <form asp-controller="Admin" asp-action="AddProduct" method="post">
+        <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" name="Name" required />
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="Description" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Price</label>
+            <input type="number" name="Price" step="0.01" required />
+        </div>
+
+        <div class="form-group">
+            <label>Stock Quantity</label>
+            <input type="number" name="StockQuantity" required />
+        </div>
+
+        <div class="form-group">
+            <label>Category</label>
+            <select name="CategoryId" required>
+                @if (categories != null)
+                {
+                    foreach (var category in categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Add Product</button>
+    </form>
+</div>
+
+<h3>Existing Products</h3>
+
+<div class="products-grid">
+    @foreach (var product in Model)
+    {
+        <div class="product-card">
+            <h3>@product.Name</h3>
+            <p class="description">@product.Description</p>
+            <p class="price">@product.Price kr</p>
+            <p>Stock: @product.StockQuantity</p>
+            <p>Category: @product.Category?.Name</p>
+        </div>
+    }
+</div>

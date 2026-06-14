@@ -1,7 +1,7 @@
 // NutShop JavaScript
 
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("NutShop loaded");
+    console.log("NeitFoods loaded");
     initializeEventListeners();
 });
 
