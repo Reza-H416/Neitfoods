@@ -10,7 +10,7 @@
 <div class="checkout-form">
     <h3>Add New Product</h3>
 
-    <form asp-controller="Admin" asp-action="AddProduct" method="post">
+    <form asp-controller="Admin" asp-action="AddProduct" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label>Product Name</label>
             <input type="text" name="Name" required />
@@ -44,6 +44,11 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <label>Product Image</label>
+            <input type="file" name="imageFile" accept="image/*" />
+        </div>
+
         <button type="submit" class="btn">Add Product</button>
     </form>
 </div>
@@ -54,6 +59,11 @@
     @foreach (var product in Model)
     {
         <div class="product-card">
+            @if (!string.IsNullOrEmpty(product.ImageUrl))
+            {
+                <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+            }
+
             <h3>@product.Name</h3>
             <p class="description">@product.Description</p>
             <p class="price">@product.Price kr</p>

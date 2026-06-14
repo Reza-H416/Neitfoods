@@ -1,35 +1,16 @@
-@model List<NutShop.Models.Product>
+<div class="product-card">
+    @if (!string.IsNullOrEmpty(product.ImageUrl))
+    {
+        <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+    }
 
-@{
-    ViewData["Title"] = "Products";
-}
+    <h3>@product.Name</h3>
+    <p class="description">@product.Description</p>
+    <p class="price">@product.Price kr</p>
+    <p>Category: @product.Category?.Name</p>
+    <p>Stock: @product.StockQuantity</p>
 
-<h2>Our Products</h2>
-
-@if (Model == null || !Model.Any())
-{
-    <p>No products available yet.</p>
-}
-else
-{
-    <div class="products-grid">
-        @foreach (var product in Model)
-        {
-            <div class="product-card">
-                <h3>@product.Name</h3>
-
-                <p class="description">@product.Description</p>
-
-                <p class="price">@product.Price kr</p>
-
-                <p>Category: @product.Category?.Name</p>
-
-                <p>Stock: @product.StockQuantity</p>
-
-                <a class="btn" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-                    View Details
-                </a>
-            </div>
-        }
-    </div>
-}
+    <a class="btn" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
+        View Details
+    </a>
+</div>

@@ -24,6 +24,7 @@ namespace NutShop.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public string ImageUrl { get; set; } = string.Empty;
         public ICollection<CartItem> CartItems { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
     }

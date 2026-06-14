@@ -8,10 +8,12 @@ namespace NutShop.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         public IActionResult Index()
@@ -36,25 +38,34 @@ namespace NutShop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(Product product)
+        public async Task<IActionResult> AddProduct(Product product, IFormFile? imageFile)
         {
-            if (ModelState.IsValid)
+            if (imageFile != null && imageFile.Length > 0)
             {
-                product.CreatedAt = DateTime.Now;
+                var uploadsFolder = Path.Combine(_environment.WebRootPath, "images", "products");
 
-                _context.Products.Add(product);
-                await _context.SaveChangesAsync();
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
 
-                return RedirectToAction("Products");
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+
+                product.ImageUrl = "/images/products/" + uniqueFileName;
             }
 
-            ViewBag.Categories = await _context.Categories.ToListAsync();
+            product.CreatedAt = DateTime.Now;
 
-            var products = await _context.Products
-                .Include(p => p.Category)
-                .ToListAsync();
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
 
-            return View("Products", products);
+            return RedirectToAction("Products");
         }
 
         public IActionResult Orders()
