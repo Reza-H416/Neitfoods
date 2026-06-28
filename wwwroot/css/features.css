@@ -1,0 +1,25 @@
+/* Features */
+.features {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    margin: 2rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.features h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.features ul {
+    list-style: none;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.features li {
+    padding: 0.6rem 0;
+    font-size: 1.1rem;
+}
+

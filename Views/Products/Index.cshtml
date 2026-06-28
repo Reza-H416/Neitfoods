@@ -1,16 +1,43 @@
-<div class="product-card">
-    @if (!string.IsNullOrEmpty(product.ImageUrl))
+@model IEnumerable<NutShop.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>Shop Our Products</h1>
+
+<div class="products-grid">
+    @foreach (var product in Model)
     {
-        <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+        <div class="product-card">
+            @if (!string.IsNullOrEmpty(product.ImageUrl))
+            {
+                <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+            }
+            else
+            {
+                <div class="product-image-placeholder"></div>
+            }
+
+            <div class="product-info">
+                <h3>@product.Name</h3>
+                <p class="price">@product.Price kr</p>
+
+                @if (product.StockQuantity > 0)
+                {
+                    <form method="post" action="/Cart/AddToCart" class="add-to-cart-form">
+                        <input type="hidden" name="productId" value="@product.Id" />
+                        <div class="quantity-control">
+                            <input type="number" name="quantity" value="1" min="1" max="@product.StockQuantity" class="quantity-input" />
+                            <button type="submit" class="btn btn-add-cart">Add to Basket</button>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <p class="out-of-stock">Out of Stock</p>
+                }
+            </div>
+        </div>
     }
-
-    <h3>@product.Name</h3>
-    <p class="description">@product.Description</p>
-    <p class="price">@product.Price kr</p>
-    <p>Category: @product.Category?.Name</p>
-    <p>Stock: @product.StockQuantity</p>
-
-    <a class="btn" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-        View Details
-    </a>
 </div>

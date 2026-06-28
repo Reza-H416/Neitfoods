@@ -1,0 +1,13 @@
+/* Links */
+.link {
+    color: #8b5a2b;
+    text-decoration: none;
+    margin-top: 1rem;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
