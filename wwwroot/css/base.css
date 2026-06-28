@@ -6,7 +6,7 @@
 }
 
 html, body {
-    height: 100%;
+    min-height: 100%;
 }
 
 body {
@@ -14,12 +14,13 @@ body {
     background-color: #f5f5f5;
     color: #333;
     line-height: 1.6;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 main {
-    flex: 1;
+    flex: 1 0 auto;
 }
 
 footer {

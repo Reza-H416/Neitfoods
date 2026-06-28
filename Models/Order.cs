@@ -6,7 +6,7 @@ namespace NutShop.Models
     {
         public int Id { get; set; }
 
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
@@ -17,14 +17,14 @@ namespace NutShop.Models
         public decimal TotalAmount { get; set; }
 
         [StringLength(200)]
-        public string ShippingAddress { get; set; }
+        public string ShippingAddress { get; set; } = string.Empty;
 
         [Phone]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
-        public ICollection<OrderItem> OrderItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

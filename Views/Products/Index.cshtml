@@ -4,15 +4,9 @@
     ViewData["Title"] = "Products";
 }
 
-<<<<<<< HEAD
 <h1>Shop Our Products</h1>
 
 <div class="products-grid">
-=======
-<h1>Products</h1>
-
-<div class="products-container">
->>>>>>> 6f9853b08400f7c14556820209d3365142519573
     @foreach (var product in Model)
     {
         <div class="product-card">
@@ -20,7 +14,6 @@
             {
                 <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
             }
-<<<<<<< HEAD
             else
             {
                 <div class="product-image-placeholder"></div>
@@ -45,18 +38,6 @@
                     <p class="out-of-stock">Out of Stock</p>
                 }
             </div>
-=======
-
-            <h3>@product.Name</h3>
-            <p class="description">@product.Description</p>
-            <p class="price">@product.Price kr</p>
-            <p>Category: @product.Category?.Name</p>
-            <p>Stock: @product.StockQuantity</p>
-
-            <a class="btn" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id">
-                View Details
-            </a>
->>>>>>> 6f9853b08400f7c14556820209d3365142519573
         </div>
     }
 </div>

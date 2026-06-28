@@ -21,7 +21,8 @@ namespace NutShop.Controllers
                 .Where(c => c.UserId == userId)
                 .Include(c => c.Product)
                 .ToListAsync();
-            
+
+            if (!cartItems.Any())
                 return RedirectToAction("Index", "Cart");
 
             ViewBag.Total = cartItems.Sum(x => x.UnitPrice * x.Quantity);
@@ -37,6 +38,7 @@ namespace NutShop.Controllers
                 .Include(c => c.Product)
                 .ToListAsync();
 
+            if (!cartItems.Any())
                 return RedirectToAction("Index", "Cart");
 
             var order = new Order
