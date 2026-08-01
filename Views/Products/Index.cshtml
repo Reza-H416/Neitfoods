@@ -1,0 +1,310 @@
+@model IEnumerable<NutShop.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="products-page">
+    <div class="page-header">
+        <h1>Shop Our Products</h1>
+        <p>Discover our premium selection of nuts and dried fruits</p>
+    </div>
+
+    <div class="products-filters">
+        <form method="get" asp-action="Index" class="filter-form">
+            <div class="filter-group">
+                <label for="search">Search</label>
+                <input type="text" name="search" id="search" placeholder="Search products..."
+                       value="@ViewBag.Search" class="form-control" />
+            </div>
+
+            <div class="filter-group">
+                <label for="categoryId">Category</label>
+                <select name="categoryId" id="categoryId" class="form-control">
+                    <option value="">All Categories</option>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category.Id" @(ViewBag.SelectedCategory == category.Id ? "selected" : "")>
+                            @category.Name
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="sortBy">Sort By</label>
+                <select name="sortBy" id="sortBy" class="form-control">
+                    <option value="name" @(ViewBag.SortBy == "name" ? "selected" : "")>Name (A-Z)</option>
+                    <option value="price_low" @(ViewBag.SortBy == "price_low" ? "selected" : "")>Price: Low to High</option>
+                    <option value="price_high" @(ViewBag.SortBy == "price_high" ? "selected" : "")>Price: High to Low</option>
+                    <option value="newest" @(ViewBag.SortBy == "newest" ? "selected" : "")>Newest</option>
+                    <option value="rating" @(ViewBag.SortBy == "rating" ? "selected" : "")>Highest Rated</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-filter">Filter</button>
+        </form>
+    </div>
+
+    <div class="products-grid">
+        @if (Model.Any())
+        {
+            @foreach (var product in Model)
+            {
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        @if (!string.IsNullOrEmpty(product.ImageUrl))
+                        {
+                            <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+                        }
+                        else
+                        {
+                            <div class="product-image-placeholder"></div>
+                        }
+                    </div>
+
+                    <div class="product-info">
+                        <h3>@product.Name</h3>
+                        <p class="category">@product.Category?.Name</p>
+                        <p class="description">@product.Description</p>
+
+                        <div class="rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= product.AverageRating)
+                                {
+                                    <span class="star filled">★</span>
+                                }
+                                else
+                                {
+                                    <span class="star">☆</span>
+                                }
+                            }
+                            @if (product.Reviews.Any())
+                            {
+                                <span class="review-count">(@product.Reviews.Count())</span>
+                            }
+                        </div>
+
+                        <div class="price-section">
+                            <span class="price">₹@product.Price</span>
+                            @if (product.StockQuantity == 0)
+                            {
+                                <span class="out-of-stock">Out of Stock</span>
+                            }
+                            else
+                            {
+                                <span class="in-stock">In Stock</span>
+                            }
+                        </div>
+
+                        @if (product.StockQuantity > 0)
+                        {
+                            <form method="post" asp-controller="Cart" asp-action="AddToCart" class="add-to-cart-form">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="number" name="quantity" value="1" min="1" max="@product.StockQuantity" class="quantity-input" />
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                        }
+
+                        <a href="@Url.Action("Details", new { id = product.Id })" class="btn btn-secondary">View Details</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="no-products">No products found. Try adjusting your filters.</p>
+        }
+    </div>
+</div>
+
+<style>
+.products-page {
+    margin: 2rem 0;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.products-filters {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.filter-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.btn-filter {
+    background-color: #667eea;
+}
+
+.btn-filter:hover {
+    background-color: #5568d3;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.product-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.product-image-wrapper {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #f1f1f1;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.product-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.category {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.description {
+    color: #777;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.rating {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.star {
+    color: #ddd;
+}
+
+.star.filled {
+    color: #ffc107;
+}
+
+.review-count {
+    margin-left: 0.5rem;
+    color: #666;
+}
+
+.price-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.price {
+    font-size: 1.5rem;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.in-stock {
+    color: #28a745;
+    font-size: 0.9rem;
+}
+
+.out-of-stock {
+    color: #dc3545;
+    font-size: 0.9rem;
+}
+
+.add-to-cart-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.quantity-input {
+    width: 70px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.btn-primary, .btn-secondary {
+    flex: 1;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+}
+</style>

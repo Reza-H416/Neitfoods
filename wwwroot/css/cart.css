@@ -1,0 +1,43 @@
+/* Cart Styling */
+.cart-items {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item p {
+    flex: 1;
+}
+
+.cart-item .btn-danger {
+    margin-left: 1rem;
+}
+
+.add-to-cart-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-input {
+    width: 70px;
+    padding: 0.5rem;
+}

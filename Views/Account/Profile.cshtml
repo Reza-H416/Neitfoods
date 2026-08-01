@@ -1,0 +1,85 @@
+@model NutShop.Models.User
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="profile-container">
+    <div class="profile-sidebar">
+        <div class="profile-header">
+            <h2>@Model.FullName</h2>
+            <p>@Model.Email</p>
+        </div>
+    </div>
+
+    <div class="profile-content">
+        <div class="profile-section">
+            <h3>Personal Information</h3>
+            <form method="post" asp-action="UpdateProfile">
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="fullName" value="@Model.FullName" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" name="phoneNumber" value="@Model.PhoneNumber" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Shipping Address</label>
+                    <textarea name="shippingAddress" class="form-control" rows="3">@Model.ShippingAddress</textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
+        </div>
+
+        <div class="profile-section">
+            <h3>Account Info</h3>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Member Since:</strong> @Model.RegisteredAt.ToString("MMMM dd, yyyy")</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.profile-header {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.profile-header h2 {
+    margin-bottom: 0.5rem;
+}
+
+.profile-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile-section h3 {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

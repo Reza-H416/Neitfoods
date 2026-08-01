@@ -1,0 +1,411 @@
+@model NutShop.Models.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="product-details">
+    <div class="product-details-container">
+        <div class="product-gallery">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="@Model.Name" class="product-main-image" />
+            }
+            else
+            {
+                <div class="product-image-placeholder">No Image</div>
+            }
+        </div>
+
+        <div class="product-details-info">
+            <h1>@Model.Name</h1>
+            <p class="category">Category: @Model.Category?.Name</p>
+
+            <div class="rating-section">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    if (i <= Model.AverageRating)
+                    {
+                        <span class="star filled">★</span>
+                    }
+                    else
+                    {
+                        <span class="star">☆</span>
+                    }
+                }
+                <span class="avg-rating">@Model.AverageRating.ToString("F1")</span>
+                <span class="review-count">(@Model.Reviews.Count() reviews)</span>
+            </div>
+
+            <div class="price-stock">
+                <div class="price-box">
+                    <span class="price">₹@Model.Price</span>
+                </div>
+
+                @if (Model.StockQuantity > 0)
+                {
+                    <div class="stock-status in-stock">
+                        In Stock (@Model.StockQuantity available)
+                    </div>
+                }
+                else
+                {
+                    <div class="stock-status out-of-stock">
+                        Out of Stock
+                    </div>
+                }
+            </div>
+
+            <p class="description">@Model.Description</p>
+
+            @if (Model.StockQuantity > 0)
+            {
+                <form method="post" asp-controller="Cart" asp-action="AddToCart" class="buy-form">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <div class="quantity-selector">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="@Model.StockQuantity" />
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-primary">Add to Cart</button>
+                </form>
+            }
+
+            <div class="product-benefits">
+                <h3>Why Choose This Product?</h3>
+                <ul>
+                    <li>✓ Premium Quality</li>
+                    <li>✓ Fresh & Natural</li>
+                    <li>✓ Fast Delivery</li>
+                    <li>✓ Money-Back Guarantee</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="reviews-section">
+        <h2>Customer Reviews</h2>
+
+        @if (HttpContextAccessor?.HttpContext?.Session?.GetInt32("UserId") != null)
+        {
+            <div class="add-review">
+                <h3>Add Your Review</h3>
+                <form method="post" asp-controller="Products" asp-action="AddReview">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+
+                    <div class="form-group">
+                        <label for="rating">Rating</label>
+                        <div class="rating-input">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <input type="radio" id="rating@i" name="rating" value="@i" required />
+                                <label for="rating@i" class="star-label">★</label>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comment">Comment</label>
+                        <textarea id="comment" name="comment" class="form-control" rows="4" placeholder="Share your experience..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Post Review</button>
+                </form>
+            </div>
+        }
+        else
+        {
+            <p class="login-prompt">
+                <a href="@Url.Action("Login", "Account")">Sign in</a> to add a review
+            </p>
+        }
+
+        <div class="reviews-list">
+            @if (Model.Reviews.Any())
+            {
+                @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+                {
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>@review.User?.FullName</strong>
+                            <span class="review-date">@review.CreatedAt.ToString("MMM dd, yyyy")</span>
+                        </div>
+                        <div class="review-rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= review.Rating)
+                                {
+                                    <span class="star filled">★</span>
+                                }
+                                else
+                                {
+                                    <span class="star">☆</span>
+                                }
+                            }
+                        </div>
+                        <p class="review-comment">@review.Comment</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="no-reviews">No reviews yet. Be the first to review!</p>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+.product-details {
+    margin: 2rem 0;
+}
+
+.product-details-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.product-gallery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-main-image {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.product-image-placeholder {
+    width: 100%;
+    height: 400px;
+    background: #f1f1f1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.product-details-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-details-info h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.category {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.rating-section {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.star {
+    color: #ddd;
+    font-size: 1.3rem;
+}
+
+.star.filled {
+    color: #ffc107;
+}
+
+.avg-rating {
+    font-weight: bold;
+    margin-left: 0.5rem;
+}
+
+.review-count {
+    color: #666;
+    margin-left: 0.5rem;
+}
+
+.price-stock {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.price-box {
+    flex: 1;
+}
+
+.price {
+    font-size: 2.5rem;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.stock-status {
+    padding: 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+    flex: 1;
+}
+
+.stock-status.in-stock {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stock-status.out-of-stock {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.description {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.buy-form {
+    margin-bottom: 2rem;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.quantity-selector input {
+    width: 80px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+.product-benefits {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.product-benefits h3 {
+    margin-bottom: 1rem;
+}
+
+.product-benefits ul {
+    list-style: none;
+    padding: 0;
+}
+
+.product-benefits li {
+    padding: 0.5rem 0;
+    color: #28a745;
+}
+
+.reviews-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.reviews-section h2 {
+    margin-bottom: 2rem;
+}
+
+.add-review {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.rating-input {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 2rem;
+}
+
+.rating-input input {
+    display: none;
+}
+
+.star-label {
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+}
+
+.rating-input input:checked + .star-label,
+.rating-input input:hover + .star-label {
+    color: #ffc107;
+}
+
+.login-prompt {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+}
+
+.login-prompt a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.reviews-list {
+    margin-top: 2rem;
+}
+
+.review-item {
+    border-bottom: 1px solid #eee;
+    padding: 1.5rem 0;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.review-date {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.review-rating {
+    margin-bottom: 0.5rem;
+}
+
+.review-comment {
+    color: #555;
+    line-height: 1.6;
+}
+
+.no-reviews {
+    color: #999;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .product-details-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+</style>

@@ -1,0 +1,32 @@
+/* Features Section */
+.features {
+    background: #ecf0f1;
+    padding: 3rem 2rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+.features h2 {
+    margin-bottom: 2rem;
+}
+
+.features ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.features li {
+    padding: 1rem;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.features li:before {
+    content: "✓ ";
+    color: #27ae60;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}

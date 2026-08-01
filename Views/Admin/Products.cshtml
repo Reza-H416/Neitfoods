@@ -1,0 +1,219 @@
+@model List<NutShop.Models.Product>
+
+@{
+    ViewData["Title"] = "Manage Products";
+    var categories = ViewBag.Categories as List<NutShop.Models.Category>;
+}
+
+<div class="admin-products">
+    <div class="page-header">
+        <h1>Product Management</h1>
+        <button id="toggleAddForm" class="btn btn-primary">+ Add New Product</button>
+    </div>
+
+    <div id="addProductForm" class="add-product-form" style="display: none;">
+        <h2>Add New Product</h2>
+        <form asp-controller="Admin" asp-action="AddProduct" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" name="Name" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="CategoryId" class="form-control" required>
+                        @foreach (var category in categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Price (₹)</label>
+                    <input type="number" name="Price" step="0.01" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label>Stock Quantity</label>
+                    <input type="number" name="StockQuantity" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="Description" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Product Image</label>
+                <input type="file" name="imageFile" accept="image/*" class="form-control" />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Add Product</button>
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('addProductForm').style.display='none'">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="products-list">
+        <h2>Existing Products (@Model.Count())</h2>
+
+        @if (Model.Any())
+        {
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td>@product.Category?.Name</td>
+                            <td>₹@product.Price</td>
+                            <td>@product.StockQuantity</td>
+                            <td class="actions">
+                                <a href="@Url.Action("EditProduct", new { id = product.Id })" class="btn btn-sm">Edit</a>
+                                <form method="post" asp-action="DeleteProduct" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                                    <input type="hidden" name="id" value="@product.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No products found.</p>
+        }
+    </div>
+</div>
+
+<script>
+document.getElementById('toggleAddForm').addEventListener('click', function() {
+    const form = document.getElementById('addProductForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+});
+</script>
+
+<style>
+.admin-products {
+    padding: 2rem;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.add-product-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-actions button {
+    padding: 0.75rem 1.5rem;
+}
+
+.products-list {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.products-table thead {
+    background: #f8f9fa;
+}
+
+.products-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+}
+
+.products-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.products-table .actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .products-table {
+        font-size: 0.9rem;
+    }
+
+    .products-table th, .products-table td {
+        padding: 0.5rem;
+    }
+
+    .products-table .actions {
+        flex-direction: column;
+    }
+}
+</style>

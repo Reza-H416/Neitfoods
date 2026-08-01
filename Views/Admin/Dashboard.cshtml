@@ -1,0 +1,263 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="admin-dashboard">
+    <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <a href="@Url.Action("Logout")" class="btn btn-danger">Logout</a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon revenue">₹</div>
+            <div class="stat-content">
+                <p class="stat-label">Total Revenue</p>
+                <p class="stat-value">₹@ViewBag.TotalRevenue?.ToString("N0")</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon orders">📦</div>
+            <div class="stat-content">
+                <p class="stat-label">Total Orders</p>
+                <p class="stat-value">@ViewBag.TotalOrders</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon products">🛍️</div>
+            <div class="stat-content">
+                <p class="stat-label">Products</p>
+                <p class="stat-value">@ViewBag.TotalProducts</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon users">👥</div>
+            <div class="stat-content">
+                <p class="stat-label">Total Users</p>
+                <p class="stat-value">@ViewBag.TotalUsers</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-actions">
+        <a href="@Url.Action("Products")" class="btn btn-primary btn-lg">
+            <span class="icon">➕</span> Manage Products
+        </a>
+        <a href="@Url.Action("Orders")" class="btn btn-primary btn-lg">
+            <span class="icon">📋</span> View Orders
+        </a>
+    </div>
+
+    <div class="recent-orders">
+        <h2>Recent Orders</h2>
+        @if (ViewBag.RecentOrders?.Count > 0)
+        {
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in ViewBag.RecentOrders)
+                    {
+                        <tr>
+                            <td>#@order.Id</td>
+                            <td>@order.User?.FullName</td>
+                            <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                            <td>₹@order.TotalAmount.ToString("N0")</td>
+                            <td>
+                                <span class="status-badge status-@order.Status.ToLower()">
+                                    @order.Status
+                                </span>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("OrderDetails", new { id = order.Id })" class="btn btn-sm">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No orders yet.</p>
+        }
+    </div>
+</div>
+
+<style>
+.admin-dashboard {
+    padding: 2rem;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    font-size: 2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: white;
+}
+
+.stat-icon.revenue {
+    background: #667eea;
+}
+
+.stat-icon.orders {
+    background: #764ba2;
+}
+
+.stat-icon.products {
+    background: #f093fb;
+}
+
+.stat-icon.users {
+    background: #4facfe;
+}
+
+.stat-label {
+    color: #999;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.dashboard-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btn-lg {
+    padding: 1.5rem;
+    text-align: center;
+    display: block;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.btn-lg .icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.recent-orders {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.recent-orders h2 {
+    margin-bottom: 1rem;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table thead {
+    background: #f8f9fa;
+}
+
+.orders-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+}
+
+.orders-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.status-badge.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.status-processing {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-badge.status-shipped {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.status-delivered {
+    background: #d4edda;
+    color: #155724;
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .orders-table {
+        font-size: 0.9rem;
+    }
+
+    .orders-table th, .orders-table td {
+        padding: 0.5rem;
+    }
+}
+</style>

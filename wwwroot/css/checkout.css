@@ -1,0 +1,40 @@
+/* Checkout Styling */
+.checkout-container {
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.checkout-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.checkout-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.checkout-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.checkout-form input,
+.checkout-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.checkout-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.checkout-form button {
+    width: 100%;
+}

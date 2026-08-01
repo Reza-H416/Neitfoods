@@ -1,0 +1,312 @@
+@model NutShop.Models.Order
+
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="confirmation-page">
+    <div class="confirmation-container">
+        <div class="confirmation-success">
+            <div class="success-icon">✓</div>
+            <h1>Order Confirmed!</h1>
+            <p>Thank you for your purchase. Your order has been received.</p>
+        </div>
+
+        <div class="order-details-card">
+            <h2>Order Details</h2>
+
+            <div class="detail-row">
+                <span class="detail-label">Order Number:</span>
+                <span class="detail-value">#@Model.Id</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Tracking Number:</span>
+                <span class="detail-value">@Model.TrackingNumber</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Order Date:</span>
+                <span class="detail-value">@Model.OrderDate.ToString("MMMM dd, yyyy HH:mm")</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Estimated Delivery:</span>
+                <span class="detail-value">@Model.EstimatedDelivery?.ToString("MMMM dd, yyyy")</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Status:</span>
+                <span class="detail-value">
+                    <span class="status-badge status-@Model.Status.ToLower()">@Model.Status</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="shipping-details-card">
+            <h2>Shipping Address</h2>
+            <p>
+                <strong>@Model.User?.FullName</strong><br />
+                @Model.ShippingAddress<br />
+                📞 @Model.PhoneNumber<br />
+                📧 @Model.Email
+            </p>
+        </div>
+
+        <div class="order-items-card">
+            <h2>Order Items</h2>
+            <div class="items-list">
+                @foreach (var item in Model.OrderItems)
+                {
+                    <div class="order-item">
+                        <div class="item-info">
+                            <p class="item-name">@item.Product?.Name</p>
+                            <p class="item-detail">Quantity: @item.Quantity x ₹@item.UnitPrice</p>
+                        </div>
+                        <p class="item-total">₹@item.TotalPrice</p>
+                    </div>
+                }
+            </div>
+
+            <div class="order-total">
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span>₹@(Model.TotalAmount - 100 - (Model.TotalAmount * 0.05m))</span>
+                </div>
+                <div class="total-row">
+                    <span>Shipping:</span>
+                    <span>₹100</span>
+                </div>
+                <div class="total-row">
+                    <span>Tax:</span>
+                    <span>₹@(Model.TotalAmount * 0.05m)</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total Amount:</span>
+                    <span>₹@Model.TotalAmount</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="next-steps">
+            <h2>What's Next?</h2>
+            <ul>
+                <li>📧 A confirmation email has been sent to @Model.Email</li>
+                <li>📦 Your order will be packed and shipped shortly</li>
+                <li>🚚 You can track your order using tracking number: <strong>@Model.TrackingNumber</strong></li>
+                <li>💬 We'll notify you once your order is on the way</li>
+            </ul>
+        </div>
+
+        <div class="confirmation-actions">
+            <a href="@Url.Action("Index", "Products")" class="btn btn-primary">Continue Shopping</a>
+            <a href="@Url.Action("Profile", "Account")" class="btn btn-secondary">View My Orders</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.confirmation-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.confirmation-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.confirmation-success {
+    background: white;
+    border-radius: 8px;
+    padding: 3rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #28a745;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin: 0 auto 1rem;
+}
+
+.confirmation-success h1 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.confirmation-success p {
+    color: #666;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.order-details-card,
+.shipping-details-card,
+.order-items-card {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.order-details-card h2,
+.shipping-details-card h2,
+.order-items-card h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #666;
+}
+
+.detail-value {
+    color: #333;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.status-badge.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.status-processing {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.shipping-details-card p {
+    color: #555;
+    line-height: 1.8;
+}
+
+.items-list {
+    margin-bottom: 2rem;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-name {
+    font-weight: bold;
+    margin: 0 0 0.5rem 0;
+}
+
+.item-detail {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.item-total {
+    font-weight: bold;
+    color: #667eea;
+}
+
+.order-total {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.total-row.grand-total {
+    border-top: 2px solid #ddd;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.next-steps {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.next-steps h2 {
+    margin-bottom: 1rem;
+}
+
+.next-steps ul {
+    list-style: none;
+    padding: 0;
+}
+
+.next-steps li {
+    padding: 0.75rem 0;
+    color: #555;
+}
+
+.confirmation-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.confirmation-actions .btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .confirmation-actions {
+        flex-direction: column;
+    }
+
+    .confirmation-actions .btn {
+        width: 100%;
+    }
+}
+</style>
