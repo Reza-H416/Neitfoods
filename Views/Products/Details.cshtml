@@ -85,7 +85,7 @@
     <div class="reviews-section">
         <h2>Customer Reviews</h2>
 
-        @if (HttpContextAccessor?.HttpContext?.Session?.GetInt32("UserId") != null)
+        @if (Context.Session.GetInt32("UserId") != null)
         {
             <div class="add-review">
                 <h3>Add Your Review</h3>
@@ -402,7 +402,7 @@
     font-style: italic;
 }
 
-@media (max-width: 768px) {
+@@media (max-width: 768px) {
     .product-details-container {
         grid-template-columns: 1fr;
         gap: 2rem;
