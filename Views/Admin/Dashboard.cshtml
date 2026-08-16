@@ -2,6 +2,14 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
+<div class="admin-status-bar">
+    <span>&#x1F512; Logged in as <strong>Admin</strong></span>
+    <form method="post" action="/Admin/Logout" style="display:inline; margin-left:1rem;">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn-logout-sm">Logout</button>
+    </form>
+</div>
+
 <h2>Admin Dashboard</h2>
 
 <div class="admin-menu">

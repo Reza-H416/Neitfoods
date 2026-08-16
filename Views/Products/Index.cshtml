@@ -10,14 +10,17 @@
     @foreach (var product in Model)
     {
         <div class="product-card">
-            @if (!string.IsNullOrEmpty(product.ImageUrl))
-            {
-                <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
-            }
-            else
-            {
-                <div class="product-image-placeholder"></div>
-            }
+            <div class="product-image-wrapper">
+                @if (!string.IsNullOrEmpty(product.ImageUrl))
+                {
+                    <img src="@product.ImageUrl" alt="@product.Name" class="product-image"
+                         style="width:100%;height:160px;object-fit:cover;object-position:center;display:block;" />
+                }
+                else
+                {
+                    <div class="product-image-placeholder" style="height:160px;"></div>
+                }
+            </div>
 
             <div class="product-info">
                 <h3>@product.Name</h3>
@@ -36,6 +39,11 @@
                 else
                 {
                     <p class="out-of-stock">Out of Stock</p>
+                }
+
+                @if (Context.Session.GetString("AdminLoggedIn") == "true")
+                {
+                    <a href="/Admin/EditProduct/@product.Id" class="btn btn-edit-admin">Edit</a>
                 }
             </div>
         </div>

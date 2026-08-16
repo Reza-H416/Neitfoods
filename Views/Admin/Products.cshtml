@@ -5,12 +5,21 @@
     var categories = ViewBag.Categories as List<NutShop.Models.Category>;
 }
 
+<div class="admin-status-bar">
+    <span>&#x1F512; Logged in as <strong>Admin</strong></span>
+    <form method="post" action="/Admin/Logout" style="display:inline; margin-left:1rem;">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn-logout-sm">Logout</button>
+    </form>
+</div>
+
 <h2>Manage Products</h2>
 
 <div class="checkout-form">
     <h3>Add New Product</h3>
 
     <form asp-controller="Admin" asp-action="AddProduct" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
         <div class="form-group">
             <label>Product Name</label>
             <input type="text" name="Name" required />

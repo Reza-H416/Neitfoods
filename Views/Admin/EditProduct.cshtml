@@ -1,0 +1,79 @@
+@model NutShop.Models.Product
+
+@{
+    ViewData["Title"] = "Edit Product";
+    var categories = ViewBag.Categories as List<NutShop.Models.Category>;
+}
+
+<div class="admin-status-bar">
+    <span>&#x1F512; Logged in as <strong>Admin</strong></span>
+    <form method="post" action="/Admin/Logout" style="display:inline; margin-left:1rem;">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn-logout-sm">Logout</button>
+    </form>
+</div>
+
+<h2>Edit Product</h2>
+
+<div class="checkout-form">
+    <form asp-controller="Admin" asp-action="EditProduct" asp-route-id="@Model.Id"
+          method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" name="Name" value="@Model.Name" required />
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="Description" required>@Model.Description</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Price</label>
+            <input type="number" name="Price" step="0.01" value="@Model.Price" required />
+        </div>
+
+        <div class="form-group">
+            <label>Stock Quantity</label>
+            <input type="number" name="StockQuantity" value="@Model.StockQuantity" required />
+        </div>
+
+        <div class="form-group">
+            <label>Category</label>
+            <select name="CategoryId" required>
+                @if (categories != null)
+                {
+                    foreach (var category in categories)
+                    {
+                        if (category.Id == Model.CategoryId)
+                        {
+                            <option value="@category.Id" selected>@category.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Product Image <small>(leave empty to keep current)</small></label>
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div style="margin-bottom:0.5rem;">
+                    <img src="@Model.ImageUrl" alt="@Model.Name" style="width:100px;border-radius:6px;" />
+                </div>
+            }
+            <input type="file" name="imageFile" accept="image/*" />
+        </div>
+
+        <div style="display:flex;gap:1rem;">
+            <button type="submit" class="btn">Save Changes</button>
+            <a href="/Admin/Products" class="btn" style="background:#6c757d;">Cancel</a>
+        </div>
+    </form>
+</div>

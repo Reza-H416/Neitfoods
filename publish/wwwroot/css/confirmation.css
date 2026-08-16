@@ -1,0 +1,15 @@
+/* Confirmation */
+.confirmation {
+    background: white;
+    padding: 3rem;
+    border-radius: 10px;
+    text-align: center;
+    margin: 2rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.confirmation h2 {
+    color: #27ae60;
+    margin-bottom: 1rem;
+}
+
