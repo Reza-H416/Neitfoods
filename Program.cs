@@ -4,11 +4,19 @@ using Microsoft.Extensions.DependencyInjection;
 using NutShop.Data;
 using NutShop.Services;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+    if (builder.Environment.IsDevelopment())
+        options.UseSqlite(connectionString);
+    else
+        options.UseNpgsql(connectionString);
+});
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
@@ -179,7 +187,9 @@ using (var scope = app.Services.CreateScope())
             Email = "admin@neitfoods.com",
             PasswordHash = authService.HashPassword("Admin@123"),
             RegisteredAt = DateTime.Now,
-            IsAdmin = true
+            IsAdmin = true,
+            PhoneNumber = "",
+            ShippingAddress = ""
         };
 
         context.Users.Add(adminUser);
