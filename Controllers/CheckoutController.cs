@@ -16,25 +16,36 @@ namespace NutShop.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = HttpContext.Session.GetString("UserId") ?? "guest";
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "Account");
+
             var cartItems = await _context.CartItems
-                .Where(c => c.UserId == userId)
+                .Where(c => c.UserId == userId.ToString())
                 .Include(c => c.Product)
                 .ToListAsync();
 
             if (!cartItems.Any())
                 return RedirectToAction("Index", "Cart");
 
+            var user = await _context.Users.FindAsync(userId);
+            ViewBag.User = user;
             ViewBag.Total = cartItems.Sum(x => x.UnitPrice * x.Quantity);
+            ViewBag.CartItems = cartItems;
+
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProcessOrder(string Email, string PhoneNumber, string ShippingAddress)
+        public async Task<IActionResult> ProcessOrder(string phoneNumber, string shippingAddress)
         {
-            var userId = HttpContext.Session.GetString("UserId") ?? "guest";
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "Account");
+
+            var user = await _context.Users.FindAsync(userId);
             var cartItems = await _context.CartItems
-                .Where(c => c.UserId == userId)
+                .Where(c => c.UserId == userId.ToString())
                 .Include(c => c.Product)
                 .ToListAsync();
 
@@ -43,13 +54,15 @@ namespace NutShop.Controllers
 
             var order = new Order
             {
-                UserId = userId,
-                Email = Email,
-                PhoneNumber = PhoneNumber,
-                ShippingAddress = ShippingAddress,
+                UserId = userId.Value,
+                Email = user.Email,
+                PhoneNumber = phoneNumber,
+                ShippingAddress = shippingAddress,
                 OrderDate = DateTime.Now,
                 Status = "Pending",
-                TotalAmount = cartItems.Sum(x => x.UnitPrice * x.Quantity)
+                TotalAmount = cartItems.Sum(x => x.UnitPrice * x.Quantity),
+                TrackingNumber = "TRK" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
+                EstimatedDelivery = DateTime.Now.AddDays(5)
             };
 
             _context.Orders.Add(order);
@@ -74,12 +87,20 @@ namespace NutShop.Controllers
             _context.CartItems.RemoveRange(cartItems);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("OrderConfirmation");
+            return RedirectToAction("Confirmation", new { orderId = order.Id });
         }
 
-        public IActionResult OrderConfirmation()
+        public async Task<IActionResult> Confirmation(int orderId)
         {
-            return View();
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null)
+                return NotFound();
+
+            return View(order);
         }
     }
 }
