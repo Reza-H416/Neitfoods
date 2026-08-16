@@ -184,7 +184,7 @@ using (var scope = app.Services.CreateScope())
         var adminUser = new NutShop.Models.User
         {
             FullName = "Admin User",
-            Email = "admin@neitfoods.com",
+            Email = "admin@watani.com",
             PasswordHash = authService.HashPassword("Admin@123"),
             RegisteredAt = DateTime.Now,
             IsAdmin = true,
