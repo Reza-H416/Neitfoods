@@ -18,6 +18,6 @@ namespace NutShop.Models
         [DataType(DataType.Currency)]
         public decimal UnitPrice { get; set; }
 
-        public DateTime AddedAt { get; set; } = DateTime.Now;
+        public DateTime AddedAt { get; set; } = DateTime.UtcNow;
     }
 }

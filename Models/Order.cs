@@ -9,7 +9,7 @@ namespace NutShop.Models
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public DateTime OrderDate { get; set; } = DateTime.Now;
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
         [StringLength(50)]
         public string Status { get; set; } = "Pending";
