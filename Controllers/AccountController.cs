@@ -43,7 +43,7 @@ namespace NutShop.Controllers
                 FullName = fullName,
                 Email = email,
                 PasswordHash = _authService.HashPassword(password),
-                RegisteredAt = DateTime.Now,
+                RegisteredAt = DateTime.UtcNow,
                 IsAdmin = false
             };
 

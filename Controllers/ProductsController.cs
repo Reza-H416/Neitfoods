@@ -75,7 +75,7 @@ namespace NutShop.Controllers
                 UserId = userId.Value,
                 Rating = rating,
                 Comment = comment,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Reviews.Add(review);
