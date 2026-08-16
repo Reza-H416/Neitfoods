@@ -12,10 +12,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
-    if (builder.Environment.IsDevelopment())
-        options.UseSqlite(connectionString);
-    else
-        options.UseNpgsql(connectionString);
+    options.UseNpgsql(connectionString);
 });
 
 builder.Services.AddScoped<IAuthService, AuthService>();
