@@ -21,7 +21,7 @@ namespace NutShop.Models
 
         public int StockQuantity { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public string ImageUrl { get; set; } = string.Empty;
 

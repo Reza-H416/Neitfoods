@@ -108,7 +108,7 @@ namespace NutShop.Controllers
                 product.ImageUrl = "/images/products/" + uniqueFileName;
             }
 
-            product.CreatedAt = DateTime.Now;
+            product.CreatedAt = DateTime.UtcNow;
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 

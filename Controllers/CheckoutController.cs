@@ -58,11 +58,11 @@ namespace NutShop.Controllers
                 Email = user.Email,
                 PhoneNumber = phoneNumber,
                 ShippingAddress = shippingAddress,
-                OrderDate = DateTime.Now,
+                OrderDate = DateTime.UtcNow,
                 Status = "Pending",
                 TotalAmount = cartItems.Sum(x => x.UnitPrice * x.Quantity),
                 TrackingNumber = "TRK" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
-                EstimatedDelivery = DateTime.Now.AddDays(5)
+                EstimatedDelivery = DateTime.UtcNow.AddDays(5)
             };
 
             _context.Orders.Add(order);

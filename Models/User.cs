@@ -24,7 +24,7 @@ namespace NutShop.Models
         [StringLength(500)]
         public string ShippingAddress { get; set; }
 
-        public DateTime RegisteredAt { get; set; } = DateTime.Now;
+        public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
 
         public bool IsAdmin { get; set; } = false;
 

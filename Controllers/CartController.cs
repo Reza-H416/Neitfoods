@@ -64,7 +64,7 @@ namespace NutShop.Controllers
                     ProductId = productId,
                     Quantity = quantity,
                     UnitPrice = product.Price,
-                    AddedAt = DateTime.Now
+                    AddedAt = DateTime.UtcNow
                 };
                 _context.CartItems.Add(cartItem);
             }
