@@ -35,29 +35,29 @@
                                         <p class="item-name">@item.Product?.Name</p>
                                         <p class="item-qty">Qty: @item.Quantity</p>
                                     </div>
-                                    <p class="item-price">₹@(item.UnitPrice * item.Quantity)</p>
+                                    <p class="item-price">@((item.UnitPrice * item.Quantity).ToString("0.00")) kr</p>
                                 </div>
                             }
                         </div>
 
                         <div class="order-total">
-                            <div class="total-row">
-                                <span>Subtotal:</span>
-                                <span>₹@(ViewBag.Total - (ViewBag.Total * 0.05))</span>
-                            </div>
-                            <div class="total-row">
-                                <span>Shipping:</span>
-                                <span>₹100</span>
-                            </div>
-                            <div class="total-row">
-                                <span>Tax (5%):</span>
-                                <span>₹@(ViewBag.Total * 0.05)</span>
-                            </div>
-                            <div class="total-row grand-total">
-                                <span>Total:</span>
-                                <span>₹@(ViewBag.Total + 100)</span>
-                            </div>
+
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span>@(((decimal)ViewBag.Total).ToString("0.00")) kr</span>
                         </div>
+
+                        <div class="total-row">
+                            <span>Shipping:</span>
+                            <span>Calculated later</span>
+                        </div>
+
+                        <div class="total-row grand-total">
+                            <span>Total:</span>
+                            <span>@(((decimal)ViewBag.Total).ToString("0.00")) kr</span>
+                        </div>
+
+                    </div>
                     }
                 </div>
 

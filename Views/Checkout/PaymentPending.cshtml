@@ -1,0 +1,47 @@
+@model NutShop.Models.Order
+
+@{
+    ViewData["Title"] = "Payment status";
+}
+
+<div class="payment-status">
+    <h1>Payment status</h1>
+
+    @if (Model.PaymentStatus == "Pending")
+    {
+        <p>
+            Your payment has not been confirmed yet.
+        </p>
+
+        <a asp-controller="Checkout"
+           asp-action="PaymentReturn"
+           asp-route-orderId="@Model.Id"
+           class="btn btn-primary">
+            Check payment again
+        </a>
+    }
+    else if (Model.PaymentStatus == "Failed")
+    {
+        <p>
+            The payment was not successful.
+            Please return to your cart and try again.
+        </p>
+
+        <a href="/Cart"
+           class="btn btn-primary">
+            Return to cart
+        </a>
+    }
+    else if (Model.PaymentStatus == "Expired")
+    {
+        <p>
+            The payment session expired.
+            Please return to your cart and try again.
+        </p>
+
+        <a href="/Cart"
+           class="btn btn-primary">
+            Return to cart
+        </a>
+    }
+</div>

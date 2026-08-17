@@ -7,7 +7,7 @@ namespace NutShop.Models
         public int Id { get; set; }
 
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
@@ -18,18 +18,28 @@ namespace NutShop.Models
         public decimal TotalAmount { get; set; }
 
         [StringLength(200)]
-        public string ShippingAddress { get; set; }
+        public string ShippingAddress { get; set; } = string.Empty;
 
         [Phone]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
-        public string TrackingNumber { get; set; }
+        public string TrackingNumber { get; set; } = string.Empty;
 
         public DateTime? EstimatedDelivery { get; set; }
 
+        // PAYMENT
+        public string PaymentStatus { get; set; } = "Pending";
+
+        public string? SumUpCheckoutId { get; set; }
+
+        public string? SumUpCheckoutReference { get; set; }
+
+        public string? SumUpTransactionCode { get; set; }
+
         public ICollection<OrderItem> OrderItems { get; set; }
+            = new List<OrderItem>();
     }
 }
