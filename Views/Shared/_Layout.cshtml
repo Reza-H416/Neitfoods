@@ -18,19 +18,15 @@
                     <li><a href="/">Home</a></li>
                     <li><a href="/Products">Shop</a></li>
                     <li><a href="/Cart">Cart</a></li>
+
                     @if (Context.Session.GetString("AdminLoggedIn") == "true")
                     {
-                        <li><a href="/Admin">Admin</a></li>
                         <li>
                             <form method="post" action="/Admin/Logout" style="display:inline">
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn-logout">Logout</button>
                             </form>
                         </li>
-                    }
-                    else
-                    {
-                        <li><a href="/Admin/Login">Admin Login</a></li>
                     }
                 </ul>
             </div>
