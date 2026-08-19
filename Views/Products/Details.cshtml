@@ -5,23 +5,41 @@
 }
 
 <div class="product-details">
+
     <div class="product-details-container">
+
+        <!-- PRODUCT IMAGE -->
         <div class="product-gallery">
+
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
-                <img src="@Model.ImageUrl" alt="@Model.Name" class="product-main-image" />
+                <img src="@Model.ImageUrl"
+                     alt="@Model.Name"
+                     class="product-main-image" />
             }
             else
             {
-                <div class="product-image-placeholder">No Image</div>
+                <div class="product-image-placeholder">
+                    No Image
+                </div>
             }
+
         </div>
 
-        <div class="product-details-info">
-            <h1>@Model.Name</h1>
-            <p class="category">Category: @Model.Category?.Name</p>
 
+        <!-- PRODUCT INFORMATION -->
+        <div class="product-details-info">
+
+            <h1>@Model.Name</h1>
+
+            <p class="category">
+                Category: @Model.Category?.Name
+            </p>
+
+
+            <!-- RATING -->
             <div class="rating-section">
+
                 @for (int i = 1; i <= 5; i++)
                 {
                     if (i <= Model.AverageRating)
@@ -33,14 +51,27 @@
                         <span class="star">☆</span>
                     }
                 }
-                <span class="avg-rating">@Model.AverageRating.ToString("F1")</span>
-                <span class="review-count">(@Model.Reviews.Count() reviews)</span>
+
+                <span class="avg-rating">
+                    @Model.AverageRating.ToString("F1")
+                </span>
+
+                <span class="review-count">
+                    (@Model.Reviews.Count() reviews)
+                </span>
+
             </div>
 
+
+            <!-- PRICE + STOCK -->
             <div class="price-stock">
+
                 <div class="price-box">
-                    <span class="price">₹@Model.Price</span>
+                    <span class="price">
+                        @Model.Price.ToString("0.00") kr
+                    </span>
                 </div>
+
 
                 @if (Model.StockQuantity > 0)
                 {
@@ -54,82 +85,374 @@
                         Out of Stock
                     </div>
                 }
+
             </div>
 
-            <p class="description">@Model.Description</p>
 
+            <!-- DESCRIPTION -->
+            <p class="description">
+                @Model.Description
+            </p>
+
+
+            <!-- ADD TO CART -->
             @if (Model.StockQuantity > 0)
             {
-                <form method="post" asp-controller="Cart" asp-action="AddToCart" class="buy-form">
-                    <input type="hidden" name="productId" value="@Model.Id" />
+                <form method="post"
+                      asp-controller="Cart"
+                      asp-action="AddToCart"
+                      class="buy-form">
+
+                    <input type="hidden"
+                           name="productId"
+                           value="@Model.Id" />
+
+
                     <div class="quantity-selector">
-                        <label for="quantity">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="@Model.StockQuantity" />
+
+                        <label for="quantity">
+                            Quantity:
+                        </label>
+
+                        <input type="number"
+                               id="quantity"
+                               name="quantity"
+                               value="1"
+                               min="1"
+                               max="@Model.StockQuantity" />
+
                     </div>
-                    <button type="submit" class="btn btn-lg btn-primary">Add to Cart</button>
+
+
+                    <button type="submit"
+                            class="btn btn-lg btn-primary">
+                        Add to Cart
+                    </button>
+
                 </form>
             }
 
+
+            <!-- BENEFITS -->
             <div class="product-benefits">
+
                 <h3>Why Choose This Product?</h3>
+
                 <ul>
                     <li>✓ Premium Quality</li>
                     <li>✓ Fresh & Natural</li>
                     <li>✓ Fast Delivery</li>
                     <li>✓ Money-Back Guarantee</li>
                 </ul>
+
             </div>
+
         </div>
+
     </div>
 
+
+    <!-- ========================= -->
+    <!-- NUTRITION INFORMATION -->
+    <!-- ========================= -->
+
+    @if (Model.EnergyKj.HasValue ||
+         Model.EnergyKcal.HasValue ||
+         Model.Fat.HasValue ||
+         Model.Carbohydrates.HasValue ||
+         Model.Protein.HasValue)
+    {
+        <div class="nutrition-section">
+
+            <div class="nutrition-card">
+
+                <div class="nutrition-header">
+
+                    <div>
+                        <h2>Näringsdeklaration</h2>
+
+                        <p>
+                            Näringsvärde per 100 g
+                        </p>
+                    </div>
+
+                    <span class="nutrition-badge">
+                        per 100 g
+                    </span>
+
+                </div>
+
+
+                <div class="nutrition-table">
+
+                    <!-- ENERGY -->
+                    <div class="nutrition-row energy-row">
+
+                        <span>
+                            Energi
+                        </span>
+
+                        <strong>
+                            @Model.EnergyKj kJ / @Model.EnergyKcal kcal
+                        </strong>
+
+                    </div>
+
+
+                    <!-- FAT -->
+                    <div class="nutrition-row">
+
+                        <span>
+                            Fett
+                        </span>
+
+                        <strong>
+                            @Model.Fat g
+                        </strong>
+
+                    </div>
+
+
+                    <div class="nutrition-row nutrition-sub">
+
+                        <span>
+                            varav mättat fett
+                        </span>
+
+                        <span>
+                            @Model.SaturatedFat g
+                        </span>
+
+                    </div>
+
+
+                    <!-- CARBOHYDRATES -->
+                    <div class="nutrition-row">
+
+                        <span>
+                            Kolhydrat
+                        </span>
+
+                        <strong>
+                            @Model.Carbohydrates g
+                        </strong>
+
+                    </div>
+
+
+                    <div class="nutrition-row nutrition-sub">
+
+                        <span>
+                            varav sockerarter
+                        </span>
+
+                        <span>
+                            @Model.Sugars g
+                        </span>
+
+                    </div>
+
+
+                    <!-- FIBER -->
+                    @if (Model.Fiber.HasValue)
+                    {
+                        <div class="nutrition-row">
+
+                            <span>
+                                Fiber
+                            </span>
+
+                            <strong>
+                                @Model.Fiber g
+                            </strong>
+
+                        </div>
+                    }
+
+
+                    <!-- PROTEIN -->
+                    <div class="nutrition-row">
+
+                        <span>
+                            Protein
+                        </span>
+
+                        <strong>
+                            @Model.Protein g
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SALT -->
+                    <div class="nutrition-row">
+
+                        <span>
+                            Salt
+                        </span>
+
+                        <strong>
+                            @Model.Salt g
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- INGREDIENTS -->
+            <div class="product-food-info">
+
+                @if (!string.IsNullOrWhiteSpace(Model.Ingredients))
+                {
+                    <div class="food-info-box">
+
+                        <h3>Ingredienser</h3>
+
+                        <p>
+                            @Model.Ingredients
+                        </p>
+
+                    </div>
+                }
+
+
+                @if (!string.IsNullOrWhiteSpace(Model.Allergens))
+                {
+                    <div class="food-info-box allergen-box">
+
+                        <h3>Allergener</h3>
+
+                        <p>
+                            @Model.Allergens
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- ========================= -->
+    <!-- REVIEWS -->
+    <!-- ========================= -->
+
     <div class="reviews-section">
+
         <h2>Customer Reviews</h2>
+
 
         @if (Context.Session.GetInt32("UserId") != null)
         {
             <div class="add-review">
+
                 <h3>Add Your Review</h3>
-                <form method="post" asp-controller="Products" asp-action="AddReview">
-                    <input type="hidden" name="productId" value="@Model.Id" />
+
+                <form method="post"
+                      asp-controller="Products"
+                      asp-action="AddReview">
+
+                    <input type="hidden"
+                           name="productId"
+                           value="@Model.Id" />
+
 
                     <div class="form-group">
-                        <label for="rating">Rating</label>
+
+                        <label for="rating">
+                            Rating
+                        </label>
+
+
                         <div class="rating-input">
+
                             @for (int i = 1; i <= 5; i++)
                             {
-                                <input type="radio" id="rating@i" name="rating" value="@i" required />
-                                <label for="rating@i" class="star-label">★</label>
+                                <input type="radio"
+                                       id="rating@i"
+                                       name="rating"
+                                       value="@i"
+                                       required />
+
+                                <label for="rating@i"
+                                       class="star-label">
+                                    ★
+                                </label>
                             }
+
                         </div>
+
                     </div>
+
 
                     <div class="form-group">
-                        <label for="comment">Comment</label>
-                        <textarea id="comment" name="comment" class="form-control" rows="4" placeholder="Share your experience..."></textarea>
+
+                        <label for="comment">
+                            Comment
+                        </label>
+
+                        <textarea id="comment"
+                                  name="comment"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Share your experience..."></textarea>
+
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Post Review</button>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Post Review
+                    </button>
+
                 </form>
+
             </div>
         }
         else
         {
             <p class="login-prompt">
-                <a href="@Url.Action("Login", "Account")">Sign in</a> to add a review
+
+                <a href="@Url.Action("Login", "Account")">
+                    Sign in
+                </a>
+
+                to add a review
+
             </p>
         }
 
+
+        <!-- REVIEW LIST -->
         <div class="reviews-list">
+
             @if (Model.Reviews.Any())
             {
-                @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+                @foreach (var review in Model.Reviews
+                    .OrderByDescending(r => r.CreatedAt))
                 {
                     <div class="review-item">
+
                         <div class="review-header">
-                            <strong>@review.User?.FullName</strong>
-                            <span class="review-date">@review.CreatedAt.ToString("MMM dd, yyyy")</span>
+
+                            <strong>
+                                @review.User?.FullName
+                            </strong>
+
+                            <span class="review-date">
+                                @review.CreatedAt.ToString("MMM dd, yyyy")
+                            </span>
+
                         </div>
+
+
                         <div class="review-rating">
+
                             @for (int i = 1; i <= 5; i++)
                             {
                                 if (i <= review.Rating)
@@ -141,20 +464,37 @@
                                     <span class="star">☆</span>
                                 }
                             }
+
                         </div>
-                        <p class="review-comment">@review.Comment</p>
+
+
+                        <p class="review-comment">
+                            @review.Comment
+                        </p>
+
                     </div>
                 }
             }
             else
             {
-                <p class="no-reviews">No reviews yet. Be the first to review!</p>
+                <p class="no-reviews">
+                    No reviews yet. Be the first to review!
+                </p>
             }
+
         </div>
+
     </div>
+
 </div>
 
+
 <style>
+
+/* ============================= */
+/* PRODUCT DETAILS */
+/* ============================= */
+
 .product-details {
     margin: 2rem 0;
 }
@@ -163,12 +503,21 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
-    margin-bottom: 3rem;
+
+    margin-bottom: 2rem;
+
     background: white;
+
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.1);
 }
+
+
+/* IMAGE */
 
 .product-gallery {
     display: flex;
@@ -178,19 +527,30 @@
 
 .product-main-image {
     width: 100%;
+    max-height: 500px;
+
+    object-fit: contain;
+
     border-radius: 8px;
 }
 
 .product-image-placeholder {
     width: 100%;
     height: 400px;
+
     background: #f1f1f1;
+
     border-radius: 8px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     color: #999;
 }
+
+
+/* INFO */
 
 .product-details-info {
     display: flex;
@@ -206,6 +566,9 @@
     color: #666;
     margin-bottom: 1rem;
 }
+
+
+/* RATING */
 
 .rating-section {
     margin-bottom: 1.5rem;
@@ -231,9 +594,15 @@
     margin-left: 0.5rem;
 }
 
+
+/* PRICE */
+
 .price-stock {
     display: flex;
     gap: 2rem;
+
+    align-items: center;
+
     margin-bottom: 2rem;
 }
 
@@ -242,16 +611,26 @@
 }
 
 .price {
-    font-size: 2.5rem;
-    color: #667eea;
+    font-size: 2.2rem;
+
+    color: #27ae60;
+
     font-weight: bold;
 }
 
+
+/* STOCK */
+
 .stock-status {
     padding: 1rem;
-    border-radius: 4px;
+
+    border-radius: 6px;
+
     font-weight: bold;
+
     flex: 1;
+
+    text-align: center;
 }
 
 .stock-status.in-stock {
@@ -264,11 +643,19 @@
     color: #721c24;
 }
 
+
+/* DESCRIPTION */
+
 .description {
     color: #555;
+
     line-height: 1.6;
+
     margin-bottom: 2rem;
 }
+
+
+/* BUY */
 
 .buy-form {
     margin-bottom: 2rem;
@@ -276,15 +663,21 @@
 
 .quantity-selector {
     display: flex;
+
     align-items: center;
+
     gap: 1rem;
+
     margin-bottom: 1rem;
 }
 
 .quantity-selector input {
     width: 80px;
-    padding: 0.5rem;
+
+    padding: 0.6rem;
+
     border: 1px solid #ddd;
+
     border-radius: 4px;
 }
 
@@ -293,9 +686,14 @@
     font-size: 1.1rem;
 }
 
+
+/* BENEFITS */
+
 .product-benefits {
     background: #f8f9fa;
+
     padding: 1.5rem;
+
     border-radius: 8px;
 }
 
@@ -310,14 +708,172 @@
 
 .product-benefits li {
     padding: 0.5rem 0;
+
     color: #28a745;
 }
 
+
+/* ============================= */
+/* NUTRITION */
+/* ============================= */
+
+.nutrition-section {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(280px, 0.65fr);
+
+    gap: 2rem;
+
+    margin-bottom: 3rem;
+}
+
+
+.nutrition-card {
+    background: white;
+
+    border-radius: 10px;
+
+    padding: 2rem;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.1);
+}
+
+
+.nutrition-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-bottom: 1.5rem;
+}
+
+
+.nutrition-header h2 {
+    margin: 0;
+
+    font-size: 1.7rem;
+}
+
+
+.nutrition-header p {
+    margin-top: 0.2rem;
+
+    color: #777;
+}
+
+
+.nutrition-badge {
+    background: #edf7f0;
+
+    color: #218c4a;
+
+    padding: 0.45rem 0.8rem;
+
+    border-radius: 20px;
+
+    white-space: nowrap;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+}
+
+
+.nutrition-table {
+    border-top: 3px solid #333;
+}
+
+
+.nutrition-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 2rem;
+
+    padding: 0.8rem 0;
+
+    border-bottom: 1px solid #ddd;
+}
+
+
+.nutrition-row strong {
+    text-align: right;
+}
+
+
+.energy-row {
+    border-bottom: 2px solid #333;
+}
+
+
+.nutrition-sub {
+    padding-left: 1.5rem;
+
+    color: #666;
+}
+
+
+/* INGREDIENTS */
+
+.product-food-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1rem;
+}
+
+
+.food-info-box {
+    background: white;
+
+    padding: 1.5rem;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.08);
+}
+
+
+.food-info-box h3 {
+    margin-bottom: 0.7rem;
+}
+
+
+.food-info-box p {
+    color: #555;
+
+    line-height: 1.6;
+}
+
+
+.allergen-box {
+    border-left: 4px solid #e67e22;
+}
+
+
+/* ============================= */
+/* REVIEWS */
+/* ============================= */
+
 .reviews-section {
     background: white;
+
     padding: 2rem;
+
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.1);
 }
 
 .reviews-section h2 {
@@ -326,14 +882,19 @@
 
 .add-review {
     background: #f8f9fa;
+
     padding: 2rem;
+
     border-radius: 8px;
+
     margin-bottom: 2rem;
 }
 
 .rating-input {
     display: flex;
+
     gap: 0.5rem;
+
     font-size: 2rem;
 }
 
@@ -343,7 +904,9 @@
 
 .star-label {
     cursor: pointer;
+
     color: #ddd;
+
     transition: color 0.2s;
 }
 
@@ -354,15 +917,22 @@
 
 .login-prompt {
     background: #f8f9fa;
+
     padding: 1rem;
+
     border-radius: 4px;
+
     margin-bottom: 2rem;
 }
 
 .login-prompt a {
     color: #667eea;
+
     text-decoration: none;
 }
+
+
+/* REVIEW LIST */
 
 .reviews-list {
     margin-top: 2rem;
@@ -370,6 +940,7 @@
 
 .review-item {
     border-bottom: 1px solid #eee;
+
     padding: 1.5rem 0;
 }
 
@@ -379,12 +950,17 @@
 
 .review-header {
     display: flex;
+
     justify-content: space-between;
+
+    gap: 1rem;
+
     margin-bottom: 0.5rem;
 }
 
 .review-date {
     color: #999;
+
     font-size: 0.9rem;
 }
 
@@ -394,18 +970,67 @@
 
 .review-comment {
     color: #555;
+
     line-height: 1.6;
 }
 
 .no-reviews {
     color: #999;
+
     font-style: italic;
 }
 
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@@media (max-width: 900px) {
+
+    .nutrition-section {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
 @@media (max-width: 768px) {
+
     .product-details-container {
         grid-template-columns: 1fr;
+
         gap: 2rem;
     }
+
+    .price-stock {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 1rem;
+    }
+
 }
+
+
+@@media (max-width: 500px) {
+
+    .product-details-container,
+    .nutrition-card,
+    .reviews-section {
+        padding: 1.25rem;
+    }
+
+    .nutrition-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .nutrition-row {
+        gap: 1rem;
+    }
+
+}
+
 </style>

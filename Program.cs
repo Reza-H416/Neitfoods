@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpClient();
 
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")));

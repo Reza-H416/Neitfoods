@@ -1,8 +1,32 @@
-/* Cart Styling */
-.cart-items {
+.cart-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+}
+
+.cart-page h1 {
+    margin-bottom: 30px;
+}
+
+.cart-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+
+.cart-items,
+.cart-products,
+.cart-summary,
+.order-summary,
+.benefits {
     background: white;
-    padding: 2rem;
-    border-radius: 8px;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.cart-items {
     margin-bottom: 2rem;
 }
 
@@ -10,7 +34,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    gap: 16px;
+    padding: 1rem 0;
     border-bottom: 1px solid #ecf0f1;
 }
 
@@ -22,22 +47,232 @@
     flex: 1;
 }
 
-.cart-item .btn-danger {
-    margin-left: 1rem;
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.add-to-cart-form {
+.cart-table th {
+    text-align: left;
+    padding: 15px 12px;
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.cart-table td {
+    padding: 20px 12px;
+    vertical-align: middle;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.product-info {
     display: flex;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 150px;
 }
 
+.product-info strong {
+    font-size: 16px;
+}
+
+.product-info span {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.price,
+.item-total {
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.add-to-cart-form,
+.quantity-form,
 .quantity-control {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 8px;
 }
 
 .quantity-input {
-    width: 70px;
-    padding: 0.5rem;
+    width: 65px;
+    padding: 9px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.btn-update {
+    border: none;
+    background: #27ae60;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-update:hover {
+    background: #229954;
+}
+
+.btn-remove,
+.cart-item .btn-danger {
+    border: none;
+    background: #e74c3c;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 0;
+}
+
+.btn-remove:hover,
+.cart-item .btn-danger:hover {
+    background: #c0392b;
+}
+
+.cart-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-width: 0;
+}
+
+.cart-summary,
+.order-summary {
+    text-align: left;
+    margin: 0;
+}
+
+.cart-summary h2,
+.cart-summary h3,
+.order-summary h2,
+.order-summary h3 {
+    margin: 0 0 20px;
+}
+
+.summary-row,
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+}
+
+.summary-row {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.summary-total {
+    margin-top: 10px;
+    border-top: 2px solid #e5e7eb;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* Cart action buttons: works with both the new classes and your existing .btn links */
+.cart-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 18px;
+}
+
+.cart-actions .btn,
+.cart-summary .btn,
+.order-summary .btn,
+.checkout-button,
+.continue-button {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+    padding: 13px 14px;
+    border-radius: 7px;
+    margin: 10px 0 0;
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.checkout-button,
+.cart-summary .btn:first-of-type,
+.order-summary .btn:first-of-type {
+    background: #27ae60;
+    color: white;
+}
+
+.checkout-button:hover,
+.cart-summary .btn:first-of-type:hover,
+.order-summary .btn:first-of-type:hover {
+    background: #229954;
+    color: white;
+}
+
+.continue-button {
+    background: #f1f3f5;
+    color: #333;
+}
+
+.continue-button:hover {
+    background: #e5e7eb;
+    color: #333;
+}
+
+.benefits h3 {
+    margin-top: 0;
+}
+
+.benefits p {
+    color: #555;
+    margin: 14px 0;
+}
+
+.empty-cart {
+    background: white;
+    padding: 50px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 900px) {
+    .cart-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-products,
+    .cart-items {
+        overflow-x: auto;
+    }
+
+    .cart-table {
+        min-width: 700px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cart-page {
+        padding: 20px 10px 40px;
+    }
+
+    .cart-products,
+    .cart-items,
+    .cart-summary,
+    .order-summary,
+    .benefits {
+        padding: 16px;
+    }
 }

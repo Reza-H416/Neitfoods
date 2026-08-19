@@ -1,5 +1,6 @@
 /* Button Styling */
-.btn, button {
+.btn,
+button {
     background-color: #27ae60;
     color: white;
     padding: 0.75rem 1.5rem;
@@ -8,9 +9,18 @@
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.3s;
+    box-sizing: border-box;
 }
 
-.btn:hover, button:hover {
+/* Anchor tags do not accept width correctly while inline, so make .btn usable on links too. */
+a.btn {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn:hover,
+button:hover {
     background-color: #229954;
 }
 

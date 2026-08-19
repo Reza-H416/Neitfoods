@@ -21,6 +21,28 @@ namespace NutShop.Models
 
         public int StockQuantity { get; set; }
 
+        public int? EnergyKj { get; set; }
+
+        public int? EnergyKcal { get; set; }
+
+        public decimal? Fat { get; set; }
+
+        public decimal? SaturatedFat { get; set; }
+
+        public decimal? Carbohydrates { get; set; }
+
+        public decimal? Sugars { get; set; }
+
+        public decimal? Fiber { get; set; }
+
+        public decimal? Protein { get; set; }
+
+        public decimal? Salt { get; set; }
+
+        public string? Ingredients { get; set; }
+
+        public string? Allergens { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public string ImageUrl { get; set; } = string.Empty;

@@ -42,15 +42,20 @@ namespace NutShop.Controllers
         }
 
         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
             var product = await _context.Products.FindAsync(productId);
+
             if (product == null)
                 return NotFound();
 
             var userId = GetUserId();
+
             var cartItem = await _context.CartItems
-                .FirstOrDefaultAsync(c => c.UserId == userId && c.ProductId == productId);
+                .FirstOrDefaultAsync(c =>
+                    c.UserId == userId &&
+                    c.ProductId == productId);
 
             if (cartItem != null)
             {
@@ -66,11 +71,22 @@ namespace NutShop.Controllers
                     UnitPrice = product.Price,
                     AddedAt = DateTime.UtcNow
                 };
+
                 _context.CartItems.Add(cartItem);
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+
+            // Stay on the page where the customer added the product
+            var returnUrl = Request.Headers["Referer"].ToString();
+
+            if (!string.IsNullOrWhiteSpace(returnUrl) &&
+                Url.IsLocalUrl(returnUrl))
+            {
+                return LocalRedirect(returnUrl);
+            }
+
+            return RedirectToAction("Index", "Products");
         }
 
         [HttpPost]

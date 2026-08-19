@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NutShop.Data;
@@ -11,9 +12,11 @@ using NutShop.Data;
 namespace NutShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260818190704_AllowGuestCheckout")]
+    partial class AllowGuestCheckout
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,12 +184,6 @@ namespace NutShop.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Allergens")
-                        .HasColumnType("text");
-
-                    b.Property<decimal?>("Carbohydrates")
-                        .HasColumnType("numeric");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
@@ -198,23 +195,8 @@ namespace NutShop.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<int?>("EnergyKcal")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("EnergyKj")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal?>("Fat")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("Fiber")
-                        .HasColumnType("numeric");
-
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Ingredients")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -225,20 +207,8 @@ namespace NutShop.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal?>("Protein")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("Salt")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("SaturatedFat")
-                        .HasColumnType("numeric");
-
                     b.Property<int>("StockQuantity")
                         .HasColumnType("integer");
-
-                    b.Property<decimal?>("Sugars")
-                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
